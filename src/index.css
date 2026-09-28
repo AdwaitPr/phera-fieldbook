@@ -1,0 +1,297 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Inter", "Helvetica Neue", sans-serif;
+
+  /* Muted, earthy — no pastels, no neon */
+  --color-ink: #1b1512;
+  --color-ink-soft: #2a211b;
+  --color-ivory: #f3ede1;
+  --color-cream: #e9e0cf;
+  --color-shell: #d8ccb5;
+  --color-clay: #a99274;
+  --color-vermilion: #7c1f22;
+  --color-vermilion-deep: #571519;
+  --color-forest: #22392f;
+  --color-forest-soft: #35543f;
+  --color-ochre: #b3822f;
+  --color-ochre-soft: #d0a457;
+  --color-turmeric: #c98a1e;
+
+  --ease-editorial: cubic-bezier(0.16, 0.84, 0.24, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-ink);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-weight: 350;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-vermilion);
+    color: var(--color-ivory);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  [id] {
+    scroll-margin-top: 92px;
+  }
+
+  /* the ivory plate carries its own paper, so the ink stays legible at any size */
+  img {
+    max-width: 100%;
+  }
+
+  /* hairline-first scrollbars hidden for the horizontal detail rail */
+  .no-bar {
+    scrollbar-width: none;
+  }
+  .no-bar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  /* ——— the grade: makes every frame read as one film ——— */
+  .grade {
+    filter: saturate(0.8) contrast(1.06) brightness(0.92) sepia(0.07);
+  }
+
+  .edge-fade {
+    -webkit-mask-image: radial-gradient(120% 100% at 62% 45%, #000 52%, rgba(0, 0, 0, 0.45) 78%, transparent 100%);
+    mask-image: radial-gradient(120% 100% at 62% 45%, #000 52%, rgba(0, 0, 0, 0.45) 78%, transparent 100%);
+  }
+
+  /* ——— LQIP: a 32px blur-up plate that dissolves when the real asset lands ——— */
+  .lqip {
+    filter: blur(26px) saturate(1.35);
+    transform: scale(1.18);
+    transition: opacity 1.4s var(--ease-editorial);
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeLift 1.5s var(--ease-editorial) forwards;
+  }
+  .reveal-wide {
+    opacity: 0;
+    transform: translateY(26px) scale(1.008);
+    animation: fadeLiftWide 2s var(--ease-editorial) forwards;
+  }
+  .reveal-rule {
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: ruleGrow 1.8s var(--ease-editorial) forwards;
+  }
+  .fx-kenburns {
+    animation: kenburns 21s cubic-bezier(0.22, 0.55, 0.1, 1) forwards;
+  }
+  .fx-breathe {
+    animation: breathe 15s ease-in-out infinite;
+  }
+  .fx-grain {
+    animation: grain 6s steps(6) infinite;
+  }
+  .fx-leak {
+    animation: leak 22s ease-in-out infinite;
+  }
+  .fx-drift {
+    animation: drift 11s ease-in-out infinite;
+  }
+  .fx-pulse-line {
+    animation: pulseLine 4.5s ease-in-out infinite;
+  }
+
+  .fx-progress {
+    transform-origin: left;
+    animation: grow var(--dur, 7s) linear forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fx-progress {
+      animation: none !important;
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .track-wide {
+    letter-spacing: 0.24em;
+  }
+  .track-mid {
+    letter-spacing: 0.14em;
+  }
+}
+
+@keyframes fadeLift {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeLiftWide {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ruleGrow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.055);
+  }
+  to {
+    transform: scale(1.13);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.86;
+  }
+}
+
+@keyframes grain {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(-3%, 2%, 0);
+  }
+  40% {
+    transform: translate3d(2%, -3%, 0);
+  }
+  60% {
+    transform: translate3d(-2%, -2%, 0);
+  }
+  80% {
+    transform: translate3d(3%, 1%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes leak {
+  0%,
+  100% {
+    opacity: 0.16;
+    transform: translate3d(-4%, 2%, 0) rotate(-6deg);
+  }
+  50% {
+    opacity: 0.4;
+    transform: translate3d(6%, -3%, 0) rotate(-2deg);
+  }
+}
+
+@keyframes pulseLine {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scaleY(0.4);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-wide,
+  .reveal-rule {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .fx-kenburns,
+  .fx-breathe,
+  .fx-grain,
+  .fx-leak,
+  .fx-drift,
+  .fx-pulse-line {
+    animation: none !important;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ——— vigil lamps in the foothills ——— */
+@keyframes lampA {
+  0%, 100% { opacity: 0.09; }
+  42%      { opacity: 0.28; }
+  57%      { opacity: 0.2; }
+}
+@keyframes lampB {
+  0%, 100% { opacity: 0.07; }
+  51%      { opacity: 0.23; }
+}
+@keyframes lampC {
+  0%, 100% { opacity: 0.1; }
+  46%      { opacity: 0.3; }
+}
+
+.fx-lamp-a { animation: lampA 9s ease-in-out infinite; }
+.fx-lamp-b { animation: lampB 11s ease-in-out 0.8s infinite; }
+.fx-lamp-c { animation: lampC 8s ease-in-out 1.6s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-lamp-a, .fx-lamp-b, .fx-lamp-c {
+    animation: none !important;
+    opacity: 0.14;
+  }
+}
